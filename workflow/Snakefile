@@ -1,0 +1,41 @@
+configfile: "workflow/config.yaml"
+
+
+rule all:
+    input:
+        expand(config['gnomad_db_backup'] + '.tar.gz',
+               version=config['version'])
+
+
+rule download_vcf:
+    params:
+        url_vcf = config['download_url']['vcf'],
+        url_tbi = config['download_url']['tbi']
+    output:
+        vcf = config['vcf'],
+        tbi = config['vcf_tbi']
+    run:
+        shell("wget {params.url_vcf} -O {output.vcf}")
+        shell("wget {params.url_tbi} -O {output.tbi}")
+
+
+rule gnomad_rocksdb:
+    input:
+        vcfs = expand(config['vcf'],
+                      version='{version}', chrom=config['chroms'])
+    params:
+        batch_size = config['batch_size']
+    output:
+        db = directory(config['gnomad_db'])
+    script:
+        "./create_rocksdb.py"
+
+
+rule backup_gnomad_rocksdb:
+    input:
+        db = config['gnomad_db']
+    output:
+        backup = directory(config['gnomad_db_backup']),
+        backup_gzip = config['gnomad_db_backup'] + '.tar.gz'
+    script:
+        "./backup_rocksdb.py"
