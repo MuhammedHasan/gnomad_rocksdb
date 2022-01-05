@@ -4,7 +4,7 @@ Fast look up interface allel frequency of variants from gnomad with rocksdb.
 
 ## Installation
 
-``
+```
 conda install -c conda-forge rocksdb python-rocksdb
 pip install gnomad_rocksdb
 ```

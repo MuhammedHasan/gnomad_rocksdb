@@ -7,10 +7,24 @@ rule all:
                version=config['version'])
 
 
+def url_vcf(wildcards):
+    return expand(
+        config['download_url'][wildcards['version']]['vcf'],
+        chrom=wildcards['chrom']
+    )
+
+
+def url_tbi(wildcards):
+    return expand(
+        config['download_url'][wildcards['version']]['tbi'],
+        chrom=wildcards['chrom']
+    )
+
+
 rule download_vcf:
     params:
-        url_vcf = config['download_url']['vcf'],
-        url_tbi = config['download_url']['tbi']
+        url_vcf = url_vcf,
+        url_tbi = url_tbi
     output:
         vcf = config['vcf'],
         tbi = config['vcf_tbi']
@@ -19,10 +33,19 @@ rule download_vcf:
         shell("wget {params.url_tbi} -O {output.tbi}")
 
 
+def vcfs(wildcards):
+    version = wildcards['version']
+    chroms = config['chroms'].copy()
+
+    if version.split('.')[0] == '2':
+        chroms.remove('Y')
+
+    return expand(config['vcf'], version=wildcards['version'], chrom=chroms)
+
+
 rule gnomad_rocksdb:
     input:
-        vcfs = expand(config['vcf'],
-                      version='{version}', chrom=config['chroms'])
+        vcfs = vcfs
     params:
         batch_size = config['batch_size']
     output:

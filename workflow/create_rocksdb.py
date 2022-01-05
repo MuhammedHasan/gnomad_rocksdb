@@ -17,7 +17,6 @@ for vcf in snakemake.input['vcfs']:
         for v in batch:
             if v.info['AC'] > 0:
                 af = v.info['AF']
-                batch_writer.put(bytes(str(v), 'utf-8'),
+                batch_writer.put(bytes(str(v).replace('chr', ''), 'utf-8'),
                                  bytes(str(af), 'utf-8'))
-
         db.write(batch_writer)
