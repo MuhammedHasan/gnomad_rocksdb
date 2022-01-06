@@ -1,12 +1,21 @@
-import os
-from subprocess import Popen, PIPE
+from click.testing import CliRunner
+from gnomad_rocksdb import GnomadMafDB
+from gnomad_rocksdb.main import gnomad_rocksdb_download
 
 
-def tests_download_gnomad(tmp_path):
+def tests_download_gnomad(tmp_path, script_runner):
+    runner = CliRunner()
+    result = runner.invoke(gnomad_rocksdb_download, f'--version _test --db_path {str(tmp_path)}')
+    assert result.exit_code == 0
 
-    __import__("pdb").set_trace()
+    db_download = GnomadMafDB(str(tmp_path))
+    it = db_download.db.iterkeys()
+    it.seek_to_first()
+    download_variants = list(it)
 
-    os.system(f'gnomad_rocksdb_download --version 2.1.1 --db_path {str(tmp_path)}')
-    
-    __import__("pdb").set_trace()
-    
+    db = GnomadMafDB('tests/data/test_db')
+    it = db.db.iterkeys()
+    it.seek_to_first()
+    variant = list(it)
+
+    assert len(download_variants) == len(variant)

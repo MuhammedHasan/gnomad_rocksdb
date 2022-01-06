@@ -10,7 +10,7 @@ requirements = [
 
 setup_requirements = ['pytest-runner', ]
 
-test_requirements = ['pytest']
+test_requirements = ['pytest', 'pytest-console-scripts']
 
 setup(
     author="M. Hasan Çelik",
@@ -27,7 +27,7 @@ setup(
     license="MIT license",
     entry_points='''
         [console_scripts]
-        gnomad_rocksdb_download=gnomad_rocksdb.main:cli
+        gnomad_rocksdb_download=gnomad_rocksdb.main:gnomad_rocksdb_download
     ''',
     keywords=['genomics', 'gnomad', 'variant', 'allel frequency'],
     name='gnomad_rocksdb',
