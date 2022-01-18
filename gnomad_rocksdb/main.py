@@ -6,7 +6,8 @@ import tarfile
 
 db_url = {
     '_test': 'https://sandbox.zenodo.org/record/990201/files/gnomad_rocksdb_test.tar.gz?download=1',
-    '2.1.1': 'https://sandbox.zenodo.org/record/990201/files/gnomad_rocksdb_2.1.1.tar.gz?download=1'
+    '2.1.1': 'https://sandbox.zenodo.org/record/990201/files/gnomad_rocksdb_2.1.1.tar.gz?download=1',
+    '3.1.2': 'https://sandbox.zenodo.org/record/997423/files/gnomad_rocksdb_3.1.2.tar.gz?download=1'
 }
 
 
