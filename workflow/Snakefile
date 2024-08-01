@@ -34,13 +34,7 @@ rule download_vcf:
 
 
 def vcfs(wildcards):
-    version = wildcards['version']
-    chroms = config['chroms'].copy()
-
-    if version.split('.')[0] == '2':
-        chroms.remove('Y')
-
-    return expand(config['vcf'], version=wildcards['version'], chrom=chroms)
+    return expand(config['vcf'], version=wildcards['version'], chrom=config['chroms'])
 
 
 rule gnomad_rocksdb:

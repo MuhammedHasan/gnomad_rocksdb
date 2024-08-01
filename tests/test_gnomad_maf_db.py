@@ -1,10 +1,12 @@
 import pytest
-from gnomad_rocksdb import GnomadMafDB
+from gnomad_rocksdb import GnomadMafDB, gnomad_rocksdb_download
 
 
 @pytest.fixture
-def gnomad_maf_db():
-    return GnomadMafDB('tests/data/test_db')
+def gnomad_maf_db(tmp_path):
+    db_path = str(tmp_path / 'test_db')
+    gnomad_rocksdb_download('_test', db_path)
+    return GnomadMafDB(db_path)
 
 
 def test_GnomadMafDB_get(gnomad_maf_db):
